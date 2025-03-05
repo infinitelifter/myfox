@@ -10,9 +10,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import dayjs from "dayjs";
+import { Reservation } from "../types/reservation";
 
 interface ReservationCardProps {
-  reservation: any;
+  reservation: Reservation;
 }
 
 const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
@@ -24,7 +25,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
   useEffect(() => {
     const hasPicture = carts && reservation.carts[0].item.picture;
     if (hasPicture) {
-      const secret = reservation.carts[0].item.picture.secret;
+      const secret = reservation.carts[0].item.picture?.secret;
       fetch(`https://api.myfox.cz/test/photo/${secret}`)
         .then((res) => res.text())
         .then((url) => {
