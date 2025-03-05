@@ -120,7 +120,7 @@ const PersonalInformation: React.FC = () => {
           type="submit"
           variant="contained"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, textTransform: "uppercase", fontWeight: 600 }}
           disabled={updateCustomerResult?.loading}
         >
           {updateCustomerResult?.loading ? (

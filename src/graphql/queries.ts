@@ -11,6 +11,9 @@ export const GET_RESERVATIONS = gql`
       id
       from
       to
+      subject {
+        alias
+      }
       carts {
         id
         name

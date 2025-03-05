@@ -9,6 +9,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 interface ReservationCardProps {
   reservation: any;
@@ -36,7 +37,7 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
     } else {
       setFetchedImageUrl("/logo.svg");
     }
-  }, [reservation]);
+  }, [reservation, carts]);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,19 +46,11 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
-
   const shopName = reservation.shop?.name || "Název obchodu";
-
-  const dateTime =
-    typeof reservation.from === "string"
-      ? reservation.from
-      : JSON.stringify(reservation.from);
-
-  const duration = "Duration";
-  const price = "Price";
+  const alias = reservation.subject?.alias;
 
   return (
-    <Card sx={{ display: "flex", mb: 2, p: 2 }}>
+    <Card sx={{ display: "flex", mb: 2, p: 2, overflow: "auto" }}>
       <CardMedia
         component="img"
         sx={{
@@ -84,11 +77,12 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
           </Typography>
           <Box sx={{ mt: 2 }}>
             <Typography variant="subtitle1" fontWeight="bold">
-              {reservation?.carts.length &&
-                reservation?.carts[0].calendar?.eventType}
+              {carts && reservation.carts[0].calendar?.eventType}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {dateTime}
+              {reservation.from
+                ? dayjs(reservation.from).format("DD.MM.YYYY HH:mm")
+                : ""}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {carts && reservation.carts[0].item.duration} minut,{" "}
@@ -117,12 +111,23 @@ const ReservationCard: React.FC<ReservationCardProps> = ({ reservation }) => {
             variant="contained"
             color="secondary"
             size="small"
+            sx={{ minWidth: "auto" }}
             onClick={handlePopoverOpen}
           >
             ...
           </Button>
           <Menu anchorEl={anchorEl} open={open} onClose={handlePopoverClose}>
-            <MenuItem onClick={handlePopoverClose}>
+            <MenuItem
+              onClick={() => {
+                if (alias) {
+                  window.open(
+                    `https://${alias}.snippet-test.myfox.cz/form/show`,
+                    "_blank"
+                  );
+                }
+                handlePopoverClose();
+              }}
+            >
               Vytvořit další rezervaci
             </MenuItem>
             <MenuItem onClick={handlePopoverClose}>
